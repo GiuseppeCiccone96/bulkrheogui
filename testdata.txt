@@ -1,0 +1,209 @@
+Data Series Information
+Name:			sw_02_06_21_s1_set2_coatedpellet_1 1
+Number of Intervals:			1
+Application:			RHEOPLUS/32 V3.62 21006865-33024
+Device:			MCR302 SN81338429; FW3.71; Slot(7,-1)
+Measuring Date/Time:			02/06/2021; 10:16 PM
+Measuring System:			PP15-SN58414; [d=1.5 mm]
+Accessories:			TU1=P-PTD200-SN81341740
+
+Calculating Constants:
+- Norm. Csr [min/s]:			0.78459182
+- Norm. Css [Pa/mNm]:			1,513.682
+- Start Delay Time [s]:			8.12
+- Substance Density [rho]:			1,000
+- Measurement Type:			1
+- Axial Compliance [m/N]:			1E-6
+- Position [m]:			1E-6
+
+Interval:			1
+Number of Data Points:			13
+
+Time Setting:			16 Meas. Pts.
+Measuring Profile:
+- Strain			Amplitude gamma = 0.001 ... 1 % log; |Slope| = 5 Pt. / dec 
+			Angular Frequency omega = 10 rad/s
+
+Meas. Pts.	Strain	Shear Stress	Storage Modulus	Loss Modulus	Damping Factor	Deflection Angle	Torque	Normal Force	Complex Viscosity	Angular Frequency
+	[%]	[Pa]	[Pa]	[Pa]	[1]	[mrad]	[µNm]	[N]	[Pa∑s]	[rad/s]
+1	0.000993	1E+2	1E+7	1.04E+6	0.104	0.002	66.2	10	1.01E+6	10
+2	0.00158	1.58E+2	9.93E+6	1E+6	0.101	0.00318	104	9.96	9.98E+5	10
+3	0.00251	2.5E+2	9.93E+6	9.82E+5	0.0989	0.00504	165	9.92	9.98E+5	10
+4	0.00396	3.93E+2	9.85E+6	1E+6	0.101	0.00797	259	9.87	9.9E+5	10
+5	0.00628	6.21E+2	9.83E+6	1.01E+6	0.103	0.0126	410	9.81	9.88E+5	10
+6	0.00996	9.72E+2	9.7E+6	1.05E+6	0.108	0.02	642	9.81	9.75E+5	10
+7	0.0158	1.5E+3	9.41E+6	1.14E+6	0.121	0.0317	988	9.81	9.47E+5	10
+8	0.025	2.21E+3	8.71E+6	1.39E+6	0.159	0.0503	1,460	9.73	8.82E+5	10
+9	0.0396	3.08E+3	7.59E+6	1.66E+6	0.218	0.0796	2,030	9.67	7.77E+5	10
+10	0.0628	4E+3	6.04E+6	1.99E+6	0.329	0.126	2,640	9.62	6.36E+5	10
+11	0.0997	4.59E+3	4.04E+6	2.21E+6	0.548	0.2	3,030	9.48	4.6E+5	10
+12	0.158	4.84E+3	2.34E+6	1.99E+6	0.849	0.317	3,200	9.38	3.07E+5	10
+13	0.25	5.02E+3	1.33E+6	1.51E+6	1.13	0.502	3,320	9.25	2.01E+5	10
+
+Data Series Information
+Name:			sw_02_06_21_s1_set2_coatedpellet_2 1
+Number of Intervals:			1
+Application:			RHEOPLUS/32 V3.62 21006865-33024
+Device:			MCR302 SN81338429; FW3.71; Slot(7,-1)
+Measuring Date/Time:			02/06/2021; 10:28 PM
+Measuring System:			PP15-SN58414; [d=1.49 mm]
+Accessories:			TU1=P-PTD200-SN81341740
+
+Calculating Constants:
+- Norm. Csr [min/s]:			0.78459182
+- Norm. Css [Pa/mNm]:			1,513.682
+- Start Delay Time [s]:			7.2
+- Substance Density [rho]:			1,000
+- Measurement Type:			1
+- Axial Compliance [m/N]:			1E-6
+- Position [m]:			1E-6
+
+Interval:			1
+Number of Data Points:			13
+
+Time Setting:			16 Meas. Pts.
+Measuring Profile:
+- Strain			Amplitude gamma = 0.001 ... 1 % log; |Slope| = 5 Pt. / dec 
+			Angular Frequency omega = 10 rad/s
+
+Meas. Pts.	Strain	Shear Stress	Storage Modulus	Loss Modulus	Damping Factor	Deflection Angle	Torque	Normal Force	Complex Viscosity	Angular Frequency
+	[%]	[Pa]	[Pa]	[Pa]	[1]	[mrad]	[µNm]	[N]	[Pa∑s]	[rad/s]
+1	0.001	1.24E+2	1.23E+7	1.28E+6	0.104	0.002	81.7	14.7	1.24E+6	10
+2	0.00157	1.93E+2	1.22E+7	1.27E+6	0.104	0.00315	127	14.5	1.22E+6	10
+3	0.0025	3.08E+2	1.23E+7	1.29E+6	0.105	0.005	204	14.3	1.23E+6	10
+4	0.00396	4.88E+2	1.23E+7	1.22E+6	0.0996	0.00792	322	14.1	1.23E+6	10
+5	0.00627	7.65E+2	1.22E+7	1.26E+6	0.104	0.0125	506	14	1.22E+6	10
+6	0.00995	1.2E+3	1.2E+7	1.32E+6	0.11	0.0199	791	13.8	1.2E+6	10
+7	0.0158	1.82E+3	1.15E+7	1.51E+6	0.132	0.0315	1,200	13.7	1.16E+6	10
+8	0.025	2.66E+3	1.05E+7	1.78E+6	0.169	0.0499	1,760	13.5	1.07E+6	10
+9	0.0396	3.72E+3	9.18E+6	2.07E+6	0.225	0.0791	2,460	13.4	9.41E+5	10
+10	0.0627	4.8E+3	7.2E+6	2.56E+6	0.355	0.125	3,170	13.3	7.65E+5	10
+11	0.0995	5.68E+3	5.04E+6	2.69E+6	0.535	0.199	3,750	13.1	5.71E+5	10
+12	0.158	6.24E+3	3.16E+6	2.4E+6	0.759	0.315	4,120	13	3.96E+5	10
+13	0.25	6.3E+3	1.72E+6	1.84E+6	1.07	0.499	4,160	12.8	2.52E+5	10
+
+Data Series Information
+Name:			sw_02_06_21_s1_set2_coatedpellet_3 1
+Number of Intervals:			1
+Application:			RHEOPLUS/32 V3.62 21006865-33024
+Device:			MCR302 SN81338429; FW3.71; Slot(7,-1)
+Measuring Date/Time:			02/06/2021; 10:32 PM
+Measuring System:			PP15-SN58414; [d=1.47 mm]
+Accessories:			TU1=P-PTD200-SN81341740
+
+Calculating Constants:
+- Norm. Csr [min/s]:			0.78459182
+- Norm. Css [Pa/mNm]:			1,513.682
+- Start Delay Time [s]:			7.1
+- Substance Density [rho]:			1,000
+- Measurement Type:			1
+- Axial Compliance [m/N]:			1E-6
+- Position [m]:			1E-6
+
+Interval:			1
+Number of Data Points:			13
+
+Time Setting:			16 Meas. Pts.
+Measuring Profile:
+- Strain			Amplitude gamma = 0.001 ... 1 % log; |Slope| = 5 Pt. / dec 
+			Angular Frequency omega = 10 rad/s
+
+Meas. Pts.	Strain	Shear Stress	Storage Modulus	Loss Modulus	Damping Factor	Deflection Angle	Torque	Normal Force	Complex Viscosity	Angular Frequency
+	[%]	[Pa]	[Pa]	[Pa]	[1]	[mrad]	[µNm]	[N]	[Pa∑s]	[rad/s]
+1	0.000994	1.42E+2	1.42E+7	1.41E+6	0.0997	0.00197	93.6	21.5	1.43E+6	10
+2	0.00159	2.28E+2	1.43E+7	1.52E+6	0.106	0.00314	150	21.1	1.43E+6	10
+3	0.0025	3.6E+2	1.43E+7	1.45E+6	0.101	0.00495	238	20.9	1.44E+6	10
+4	0.00395	5.68E+2	1.43E+7	1.48E+6	0.103	0.00782	375	20.7	1.44E+6	10
+5	0.00626	8.93E+2	1.42E+7	1.49E+6	0.105	0.0124	590	20.6	1.43E+6	10
+6	0.00991	1.4E+3	1.41E+7	1.53E+6	0.109	0.0196	927	20.4	1.41E+6	10
+7	0.0157	2.17E+3	1.37E+7	1.67E+6	0.122	0.0311	1,430	20.3	1.38E+6	10
+8	0.0249	3.22E+3	1.28E+7	2E+6	0.156	0.0493	2,130	20.2	1.29E+6	10
+9	0.0395	4.55E+3	1.13E+7	2.38E+6	0.212	0.0781	3,000	20	1.15E+6	10
+10	0.0626	6E+3	9.12E+6	2.94E+6	0.322	0.124	3,960	19.7	9.58E+5	10
+11	0.0993	7.22E+3	6.52E+6	3.23E+6	0.495	0.196	4,770	19.5	7.27E+5	10
+12	0.157	8.19E+3	4.23E+6	3.03E+6	0.715	0.311	5,410	19.2	5.2E+5	10
+13	0.25	8.55E+3	2.38E+6	2.46E+6	1.03	0.494	5,650	18.9	3.43E+5	10
+
+Data Series Information
+Name:			sw_02_06_21_s1_set2_coatedpellet_4 1
+Number of Intervals:			1
+Application:			RHEOPLUS/32 V3.62 21006865-33024
+Device:			MCR302 SN81338429; FW3.71; Slot(7,-1)
+Measuring Date/Time:			02/06/2021; 10:37 PM
+Measuring System:			PP15-SN58414; [d=1.43 mm]
+Accessories:			TU1=P-PTD200-SN81341740
+
+Calculating Constants:
+- Norm. Csr [min/s]:			0.78459182
+- Norm. Css [Pa/mNm]:			1,513.682
+- Start Delay Time [s]:			7.19
+- Substance Density [rho]:			1,000
+- Measurement Type:			1
+- Axial Compliance [m/N]:			1E-6
+- Position [m]:			1E-6
+
+Interval:			1
+Number of Data Points:			13
+
+Time Setting:			16 Meas. Pts.
+Measuring Profile:
+- Strain			Amplitude gamma = 0.001 ... 1 % log; |Slope| = 5 Pt. / dec 
+			Angular Frequency omega = 10 rad/s
+
+Meas. Pts.	Strain	Shear Stress	Storage Modulus	Loss Modulus	Damping Factor	Deflection Angle	Torque	Normal Force	Complex Viscosity	Angular Frequency
+	[%]	[Pa]	[Pa]	[Pa]	[1]	[mrad]	[µNm]	[N]	[Pa∑s]	[rad/s]
+1	0.001	2.51E+2	2.48E+7	3.69E+6	0.149	0.00194	166	34.8	2.51E+6	10
+2	0.00156	4.02E+2	2.56E+7	3.1E+6	0.121	0.00301	265	33.4	2.58E+6	10
+3	0.00248	6.52E+2	2.61E+7	2.92E+6	0.112	0.0048	431	32.4	2.62E+6	10
+4	0.00393	1.04E+3	2.62E+7	2.87E+6	0.109	0.0076	684	31.6	2.63E+6	10
+5	0.00622	1.63E+3	2.6E+7	2.87E+6	0.11	0.012	1,080	31.1	2.62E+6	10
+6	0.00987	2.54E+3	2.56E+7	3.02E+6	0.118	0.0191	1,680	30.6	2.58E+6	10
+7	0.0157	3.88E+3	2.46E+7	3.33E+6	0.135	0.0302	2,570	30.1	2.48E+6	10
+8	0.0248	5.64E+3	2.23E+7	4.09E+6	0.183	0.0479	3,720	29.7	2.27E+6	10
+9	0.0393	7.68E+3	1.89E+7	5.01E+6	0.266	0.076	5,080	29.4	1.95E+6	10
+10	0.0624	9.73E+3	1.44E+7	6.08E+6	0.423	0.12	6,430	29	1.56E+6	10
+11	0.0988	1.15E+4	9.72E+6	6.39E+6	0.657	0.191	7,600	28.7	1.16E+6	10
+12	0.157	1.27E+4	5.86E+6	5.55E+6	0.948	0.303	8,360	28.2	8.07E+5	10
+13	0.248	1.38E+4	3.52E+6	4.31E+6	1.22	0.479	9,120	28	5.56E+5	10
+
+Data Series Information
+Name:			sw_02_06_21_s1_set2_coatedpellet_5 1
+Number of Intervals:			1
+Application:			RHEOPLUS/32 V3.62 21006865-33024
+Device:			MCR302 SN81338429; FW3.71; Slot(7,-1)
+Measuring Date/Time:			02/06/2021; 10:51 PM
+Measuring System:			PP15-SN58414; [d=1.404 mm]
+Accessories:			TU1=P-PTD200-SN81341740
+
+Calculating Constants:
+- Norm. Csr [min/s]:			0.78459182
+- Norm. Css [Pa/mNm]:			1,513.682
+- Start Delay Time [s]:			7.3
+- Substance Density [rho]:			1,000
+- Measurement Type:			1
+- Axial Compliance [m/N]:			1E-6
+- Position [m]:			1E-6
+
+Interval:			1
+Number of Data Points:			13
+
+Time Setting:			16 Meas. Pts.
+Measuring Profile:
+- Strain			Amplitude gamma = 0.001 ... 1 % log; |Slope| = 5 Pt. / dec 
+			Angular Frequency omega = 10 rad/s
+
+Meas. Pts.	Strain	Shear Stress	Storage Modulus	Loss Modulus	Damping Factor	Deflection Angle	Torque	Normal Force	Complex Viscosity	Angular Frequency
+	[%]	[Pa]	[Pa]	[Pa]	[1]	[mrad]	[µNm]	[N]	[Pa∑s]	[rad/s]
+1	0.000982	3.37E+2	3.4E+7	4.34E+6	0.128	0.00188	222	45.2	3.43E+6	10
+2	0.00154	5.45E+2	3.52E+7	4.16E+6	0.118	0.00294	360	44.2	3.54E+6	10
+3	0.00247	8.83E+2	3.55E+7	4.07E+6	0.115	0.00472	583	43.4	3.57E+6	10
+4	0.00391	1.4E+3	3.56E+7	4.12E+6	0.116	0.00747	927	42.9	3.59E+6	10
+5	0.00619	2.2E+3	3.53E+7	4.15E+6	0.117	0.0118	1,460	42.3	3.56E+6	10
+6	0.00982	3.43E+3	3.47E+7	4.26E+6	0.123	0.0187	2,270	41.8	3.49E+6	10
+7	0.0156	5.24E+3	3.33E+7	4.7E+6	0.141	0.0297	3,460	41.2	3.36E+6	10
+8	0.0247	7.66E+3	3.05E+7	5.63E+6	0.185	0.0471	5,060	40.9	3.1E+6	10
+9	0.0391	1.05E+4	2.59E+7	7.12E+6	0.275	0.0746	6,930	40.3	2.68E+6	10
+10	0.0621	1.33E+4	1.95E+7	8.8E+6	0.45	0.118	8,790	39.9	2.14E+6	10
+11	0.0984	1.56E+4	1.28E+7	9.37E+6	0.73	0.187	10,300	39.3	1.59E+6	10
+12	0.156	1.72E+4	7.37E+6	8.17E+6	1.11	0.297	11,300	38.6	1.1E+6	10
+13	0.251	1.84E+4	3.96E+6	6.18E+6	1.56	0.477	12,200	38.2	7.34E+5	10
