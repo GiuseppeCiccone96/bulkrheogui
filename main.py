@@ -144,7 +144,7 @@ class BulkRheoGUI:
 			self.tool_radius=25.0/2.0 #mm
 		if measuring_tool=="PP15":
 			self.tool_radius=15.0/2 #mm
-		if measuring_tool=="PP8":
+		if measuring_tool=="PP08":
 			self.tool_radius=8.0/2 #mm
 
 		# Area of tool
