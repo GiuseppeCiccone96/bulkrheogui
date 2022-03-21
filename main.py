@@ -80,7 +80,6 @@ class BulkRheoGUI:
 							headerIndex = []
 							for word in target_variables:
 								headerIndex.append(header.index(word))
-							headerIndex = list(OrderedDict.fromkeys(headerIndex)) #removes duplicates if present while maintaining order
 							magicheader = True
 							jump = 1 #jump 1 line if we are at header
 						else:
@@ -94,20 +93,9 @@ class BulkRheoGUI:
 						continue
 					else:
 						if riga.strip()!='':
-							rigaall = (riga.strip().replace(',', '.').split('\t'))
-							#Sometimes data columns contain terrible strings 
-							#that are non convertible to data floats. The only options
-							#is to remove them! 
-							if "DSO" in rigaall:
-								rigaall.remove("DSO")
-							if "ME-.taD" in rigaall:
-								rigaall.remove("ME-.taD")
-							if "M- .MV-" in rigaall:
-								rigaall.remove("M- .MV-")
-							line_l = list(map(float,rigaall)) #list
-							newline=[]
-							for ind in headerIndex:
-								newline.append(line_l[ind])
+							rigaall = np.array((riga.strip().replace(',', '.').split('\t')))
+							rigadata = rigaall[headerIndex] #takes only indexes from selected header variables
+							newline = list(map(float,rigadata)) #list
 							data.append(newline)
 			if len(data)>0:
 				databox.append(np.array(data))
@@ -119,7 +107,7 @@ class BulkRheoGUI:
 		# converting it to an array allows to have good structure for manipulation, i.e.
 		# an array of shape (n_points,n_variables). See target_variables to understand where n_variables
 		#comes from.
-		# print(np.shape(np.array(self.data))) 
+		# print(np.shape(np.array(self.data))) #shape is not always as expected
 
 	@PrepareExperiment.wraps
 	@set_design(text="print metadata")
@@ -226,8 +214,8 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	def tabulate_data(self):
 		data=np.array(self.data)
-		names = self.names
-
+		names = np.array(self.names)
+		
 		if self.PrepareExperiment.experiment.value=="strain sweep":
 			variables_names=["Strain","Storage Modulus","Loss Modulus"]
 
@@ -237,14 +225,15 @@ class BulkRheoGUI:
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
 			variables_names=["Time","Shear Stress"]
 
+		#this does not work sometimes, depends on how data is loaded (see load_file)
 		column_names = variables_names*len(data) #repeat variables names for each test
 		new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))]
-		data = np.array([np.array(data[i])[:,j] for i in range(len(data)) for j in range(len(variables_names))]).T
-
-		df=pd.DataFrame(data,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
+		datat = np.array([np.array(data[i])[:,j] for i in range(len(data)) for j in range(len(variables_names))]).T
+		
+		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
+		
 		self.PlotData.tabledata.value=df
 
-		
 if __name__ == "__main__":
 	ui = BulkRheoGUI()
 	ui.show()
