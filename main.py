@@ -8,7 +8,7 @@ import pandas as pd
 from pathlib import Path
 import os
 #Magicclass specific imports
-from magicclass import magicclass,set_design,field,set_options
+from magicclass import magicclass,set_design,field,set_options,build_help
 from magicclass.widgets import Table,CheckBox,PushButton
 from magicgui import magicgui
 #Others
@@ -67,7 +67,7 @@ class BulkRheoGUI:
 					if riga.strip() == "Measuring Profile:": #start reading when we are at "Measuring Profile:"
 						reading=True
 						if len(data)>0:
-							databox.append(data)
+							databox.append(data) #np.array(data)
 						data = []
 						if magicheader is False: #we are at the header
 							for _ in range(3): 
@@ -96,7 +96,7 @@ class BulkRheoGUI:
 							newline = list(map(float,rigadata)) #list
 							data.append(newline)
 			if len(data)>0:
-				databox.append(np.array(data))
+				databox.append(data) #np.array(data)
 		self.names=names
 		self.data=databox
 		self.dataset.append(self.data)
@@ -147,9 +147,11 @@ class BulkRheoGUI:
 	@magicclass(name="Visualization",layout="vertical",widget_type="groupbox")
 	class PlotData:
 		
-		plot_storage_modulus=field(PushButton,options={"enabled": False})
+		plot_storage_tooltip="Plots storage modulus for each test."
+		plot_storage_modulus=field(PushButton,options={"enabled": False,"tooltip":plot_storage_tooltip})
 		
-		plot_loss_modulus=field(PushButton,options={"enabled": False})
+		plot_loss_tooltip="Plots loss modulus for each test."
+		plot_loss_modulus=field(PushButton,options={"enabled": False,"tooltip":plot_loss_tooltip})
 
 		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":True,
@@ -222,9 +224,9 @@ class BulkRheoGUI:
 	
 	@PlotData.wraps
 	def tabulate_data(self):
-		data=np.array(self.data)
+		data=self.data 
 		names = np.array(self.names)
-		
+	
 		if self.PrepareExperiment.experiment.value=="strain sweep":
 			variables_names=["Strain","Storage Modulus","Loss Modulus"]
 
@@ -233,15 +235,29 @@ class BulkRheoGUI:
 
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
 			variables_names=["Time","Shear Stress"]
-
-		#this does not work sometimes, depends on how data is loaded (see load_file)
+		
+		#Stores the length of each test (block), disregarding number of varibales (3)
+		row_lengths = []
+		for i in range(len(data)):
+			row_lengths.append(len(np.array(data[i])))
+		
+		max_l = max(row_lengths)
+		
+		#Now compensate shorter rows by appending None so data can be tabulated
+		for i in range(len(data)):
+			while len(data[i]) < max_l:
+				data[i].append([None]*len(variables_names))
+		
 		column_names = variables_names*len(data) #repeat variables names for each test
-		new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))]
+		new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))] #repeated names
 		datat = np.array([np.array(data[i])[:,j] for i in range(len(data)) for j in range(len(variables_names))]).T
 		
 		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
-		
 		self.PlotData.tabledata.value=df
+
+	def show_help(self):
+		"""Shows help in navigating the gui."""
+		build_help(self).show()
 
 if __name__ == "__main__":
 	ui = BulkRheoGUI()
