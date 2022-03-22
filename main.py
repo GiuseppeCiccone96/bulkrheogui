@@ -240,9 +240,7 @@ class BulkRheoGUI:
 		row_lengths = []
 		for i in range(len(data)):
 			row_lengths.append(len(np.array(data[i])))
-		
 		max_l = max(row_lengths)
-		
 		#Now compensate shorter rows by appending None so data can be tabulated
 		for i in range(len(data)):
 			while len(data[i]) < max_l:
