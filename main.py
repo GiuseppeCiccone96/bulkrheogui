@@ -18,9 +18,9 @@ from magicgui import magicgui
 #activate buttons for plotting G'/G''. If experiment is stress relaxation
 #activate buttons for plottsing shear stress
 
-@magicclass(labels="True",popup_mode="popup",widget_type="MainWindow")
+@magicclass(labels="True",popup_mode="popup",widget_type="split",layout="vertical")
 class BulkRheoGUI:
-
+	
 	def __init__(self):
 		#number of experiments
 		self.numexp=0 
