@@ -9,11 +9,9 @@ from pathlib import Path
 import os
 #Magicclass specific imports
 from magicclass import magicclass,set_design,field,set_options
-from magicclass.widgets import Table
+from magicclass.widgets import Table,CheckBox,PushButton
 from magicgui import magicgui
-from magicgui.widgets import ComboBox, CheckBox
 #Others
-from collections import OrderedDict
 
 #TODO 
 #if experiment is either strain sweep or frequency sweep,
@@ -148,22 +146,32 @@ class BulkRheoGUI:
 	# plt1 = field(Figure, options={"nrows": 1, "ncols": 1})
 	@magicclass(name="Visualization",layout="vertical",widget_type="groupbox")
 	class PlotData:
-
-		def plot_storage_modulus(self): ...
 		
-		def plot_loss_modulus(self): ...
+		plot_storage_modulus=field(PushButton,options={"enabled": False})
+		
+		plot_loss_modulus=field(PushButton,options={"enabled": False})
 
-		def plot_shear_stress(self): ...
+		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
+		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":True,
+		"widget_type":CheckBox})
 
 		table_data_tooltip="Tabulated data for copying and pasting in further software of preference (e.g., Prism)"
 		tabledata=field(Table, options={"label": "Experiment type", "tooltip":table_data_tooltip})
-		
-	@PlotData.wraps
-	def plot_shear_stress(self):
-		pass
 
 	@PlotData.wraps
-	def plot_storage_modulus(self):
+	@PlotData.plot_averages.connect
+	def _plot_averages(self):
+		if self.PlotData.plot_averages.value is True:
+			#check length of each test 
+			#slice data to that length
+			#plot average G' and G''
+			print("this function does not do anything yet!")
+		if self.PlotData.plot_averages.value is False:
+			print("why did you click again!")
+
+	@PlotData.wraps
+	@PlotData.plot_storage_modulus.connect
+	def _plot_storage_modulus(self):
 		# self.plt.axes[0].set_yscale('log')
 		# self.plt.axes[0].set_xscale('log')
 		fig, ax = plt.subplots(1, 1, figsize=(5,5))
@@ -187,7 +195,8 @@ class BulkRheoGUI:
 			plt.show()
 	
 	@PlotData.wraps
-	def plot_loss_modulus(self):
+	@PlotData.plot_loss_modulus.connect
+	def _plot_loss_modulus(self):
 		#add filename on plot
 		# self.plt1.axes[0].set_yscale('log')
 		# self.plt1.axes[0].set_xscale('log')
