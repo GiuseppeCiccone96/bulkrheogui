@@ -11,3 +11,4 @@ def fill_none(data, var_names):
         while len(data[i]) < max_l:
             data[i].append([None]*len(var_names))
     return data
+

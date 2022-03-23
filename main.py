@@ -9,7 +9,7 @@ from pathlib import Path
 import os
 #Magicclass specific imports
 from magicclass import magicclass,set_design,field,set_options,build_help
-from magicclass.widgets import Table,CheckBox,PushButton
+from magicclass.widgets import Table,CheckBox,PushButton,Figure
 from magicgui import magicgui
 #Others
 from functions import fill_none
@@ -43,6 +43,8 @@ class BulkRheoGUI:
 
 		table_metadata=field(Table)
 
+		# fig_test=field(Figure)
+
 	@PrepareExperiment.wraps
 	def load_file(self,path: Path):
 		"""Reads rheometer file to extract data of interest."""
@@ -52,7 +54,7 @@ class BulkRheoGUI:
 		if self.PrepareExperiment.experiment.value=="frequency sweep":
 			target_variables = ["Angular Frequency", "Storage Modulus", "Loss Modulus"]
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
-			target_variables = ["Time", "Shear Stress"]
+			target_variables = ["Time","Relaxation Modulus","Shear Stress"] #check stress relaxation files!
 		with open(self.path, mode='r', encoding='utf-8', errors='ignore') as f:
 			self.numexp+=1
 			#columns of interest to read and extract 
@@ -78,6 +80,7 @@ class BulkRheoGUI:
 							#storing index of variables of interest
 							headerIndex = []
 							for word in target_variables:
+								print(word)
 								headerIndex.append(header.index(word))
 							magicheader = True
 							jump = 1 #jump 1 line if we are at header
@@ -222,7 +225,7 @@ class BulkRheoGUI:
 		if self.PrepareExperiment.experiment.value == "frequency sweep":
 			ax1.set_xlabel("Frequency (rad/s)")
 			plt.show()
-	
+
 	@PlotData.wraps
 	def tabulate_data(self):
 		data=self.data 
