@@ -80,7 +80,6 @@ class BulkRheoGUI:
 							#storing index of variables of interest
 							headerIndex = []
 							for word in target_variables:
-								print(word)
 								headerIndex.append(header.index(word))
 							magicheader = True
 							jump = 1 #jump 1 line if we are at header
