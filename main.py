@@ -51,10 +51,13 @@ class BulkRheoGUI:
 		self.path=str(path)
 		if self.PrepareExperiment.experiment.value=="strain sweep":
 			target_variables = ["Strain","Storage Modulus", "Loss Modulus"]
+			skiprows=3
 		if self.PrepareExperiment.experiment.value=="frequency sweep":
 			target_variables = ["Angular Frequency", "Storage Modulus", "Loss Modulus"]
+			skiprows=3
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
 			target_variables = ["Time","Relaxation Modulus","Shear Stress"] #check stress relaxation files!
+			skiprows=2
 		with open(self.path, mode='r', encoding='utf-8', errors='ignore') as f:
 			self.numexp+=1
 			#columns of interest to read and extract 
@@ -73,7 +76,7 @@ class BulkRheoGUI:
 							databox.append(data) #np.array(data)
 						data = []
 						if magicheader is False: #we are at the header
-							for _ in range(3): 
+							for _ in range(skiprows): 
 								#skipping 3 lines
 								f.readline()
 							header = f.readline().strip().split('\t')
@@ -237,7 +240,7 @@ class BulkRheoGUI:
 			variables_names=["Frequency","Storage Modulus","Loss Modulus"]
 
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
-			variables_names=["Time","Shear Stress"]
+			variables_names=["Time","Relaxation Modulus","Shear Stress"]
 		
 		data = fill_none(data,variables_names)
 		
