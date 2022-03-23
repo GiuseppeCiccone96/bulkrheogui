@@ -12,6 +12,7 @@ from magicclass import magicclass,set_design,field,set_options,build_help
 from magicclass.widgets import Table,CheckBox,PushButton
 from magicgui import magicgui
 #Others
+from functions import fill_none
 
 #TODO 
 #if experiment is either strain sweep or frequency sweep,
@@ -236,15 +237,7 @@ class BulkRheoGUI:
 		if self.PrepareExperiment.experiment.value=="stress relaxation":
 			variables_names=["Time","Shear Stress"]
 		
-		#Stores the length of each test (block), disregarding number of varibales (3)
-		row_lengths = []
-		for i in range(len(data)):
-			row_lengths.append(len(np.array(data[i])))
-		max_l = max(row_lengths)
-		#Now compensate shorter rows by appending None so data can be tabulated
-		for i in range(len(data)):
-			while len(data[i]) < max_l:
-				data[i].append([None]*len(variables_names))
+		data = fill_none(data,variables_names)
 		
 		column_names = variables_names*len(data) #repeat variables names for each test
 		new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))] #repeated names
