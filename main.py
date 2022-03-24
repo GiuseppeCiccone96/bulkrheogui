@@ -37,12 +37,23 @@ class BulkRheoGUI:
 		def print_metadata(self): ...
 
 		table_metadata=field(Table)
-
-		# fig_test=field(Figure)
+	
+	@PrepareExperiment.wraps
+	@PrepareExperiment.experiment.connect
+	def _toggle_experiment(self):
+		"""Controls visibility of plotting fields based on experiment type."""
+		if self.PrepareExperiment.experiment.value=="stress relaxation":
+			self.PlotData.plot_relax_modulus.visible=True
+			self.PlotData.plot_storage_modulus.visible=False
+			self.PlotData.plot_loss_modulus.visible=False
+		elif self.PrepareExperiment.experiment.value=="strain sweep" or  self.PrepareExperiment.experiment.value=="frequency sweep":
+			self.PlotData.plot_relax_modulus.visible=False
+			self.PlotData.plot_storage_modulus.visible=True
+			self.PlotData.plot_loss_modulus.visible=True
 
 	@PrepareExperiment.wraps
 	def load_file(self,path: Path):
-		"""Reads rheometer file to extract data of interest."""
+		"""Reads rheometer file to extract data of interest based on experiment type."""
 		self.path=str(path)
 		if self.PrepareExperiment.experiment.value=="strain sweep":
 			target_variables = ["Strain","Storage Modulus", "Loss Modulus"]
@@ -149,9 +160,8 @@ class BulkRheoGUI:
 	class PlotData:
 		
 		def __init__(self):
-
 			self.cmap=plt.cm.viridis #default cmap	
-
+		
 		plot_storage_tooltip="Plots storage modulus for each test."
 		plot_storage_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_storage_tooltip})
 		
@@ -159,14 +169,14 @@ class BulkRheoGUI:
 		plot_loss_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_loss_tooltip})
 
 		plot_relax_tooltip="Plots loss modulus for each test (stress relaxation)."
-		plot_relax_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_relax_tooltip})
+		plot_relax_modulus=field(PushButton,options={"enabled":True,"tooltip":plot_relax_tooltip,"visible":False})
 
 		colormap_tooltip = "Changes the colormap of the produced plots."
 		colormap=field(str, options={"label": "Color map","choices":["Viridis",
 		"Plasma", "Inferno"], "tooltip":colormap_tooltip})
 
 		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
-		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":True,
+		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":False,
 		"widget_type":CheckBox})
 
 		table_data_tooltip="Tabulated data for copying and pasting in further software of preference (e.g., Prism)"
