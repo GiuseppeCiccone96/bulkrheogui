@@ -154,10 +154,13 @@ class BulkRheoGUI:
 	class PlotData:
 		
 		plot_storage_tooltip="Plots storage modulus for each test."
-		plot_storage_modulus=field(PushButton,options={"enabled": False,"tooltip":plot_storage_tooltip})
+		plot_storage_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_storage_tooltip})
 		
 		plot_loss_tooltip="Plots loss modulus for each test."
-		plot_loss_modulus=field(PushButton,options={"enabled": False,"tooltip":plot_loss_tooltip})
+		plot_loss_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_loss_tooltip})
+
+		plot_relax_tooltip="Plots loss modulus for each test (stress relaxation)."
+		plot_relax_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_relax_tooltip})
 
 		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":True,
@@ -228,6 +231,23 @@ class BulkRheoGUI:
 			ax1.set_xlabel("Frequency (rad/s)")
 			plt.show()
 
+	@PlotData.wraps
+	@PlotData.plot_relax_modulus.connect
+	def _plot_relax_modulus(self):
+		#add filename on plot
+		# self.plt1.axes[0].set_yscale('log')
+		# self.plt1.axes[0].set_xscale('log')
+		fig, ax2 = plt.subplots(1, 1, figsize=(5,5))
+		ax2.set_yscale('log')
+		ax2.set_xscale('log')
+		fig.suptitle('Relaxation Modulus')
+		ax2.set_ylabel('$G(t)$ (Pa)')
+		ax2.set_xlabel('t (s)')
+		for i in range(len(self.data)):
+			ax2.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i])
+		plt.legend()
+		plt.show()
+	
 	@PlotData.wraps
 	def tabulate_data(self):
 		data=self.data 
