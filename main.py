@@ -14,11 +14,6 @@ from magicgui import magicgui
 #Others
 from functions import fill_none
 
-#TODO 
-#if experiment is either strain sweep or frequency sweep,
-#activate buttons for plotting G'/G''. If experiment is stress relaxation
-#activate buttons for plottsing shear stress
-
 @magicclass(labels="True",popup_mode="popup",widget_type="split",layout="vertical")
 class BulkRheoGUI:
 	
