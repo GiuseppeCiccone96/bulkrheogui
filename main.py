@@ -148,6 +148,10 @@ class BulkRheoGUI:
 	@magicclass(name="Visualization",layout="vertical",widget_type="groupbox")
 	class PlotData:
 		
+		def __init__(self):
+
+			self.cmap=plt.cm.viridis #default cmap	
+
 		plot_storage_tooltip="Plots storage modulus for each test."
 		plot_storage_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_storage_tooltip})
 		
@@ -157,12 +161,32 @@ class BulkRheoGUI:
 		plot_relax_tooltip="Plots loss modulus for each test (stress relaxation)."
 		plot_relax_modulus=field(PushButton,options={"enabled": True,"tooltip":plot_relax_tooltip})
 
+		colormap_tooltip = "Changes the colormap of the produced plots."
+		colormap=field(str, options={"label": "Color map","choices":["Viridis",
+		"Plasma", "Inferno"], "tooltip":colormap_tooltip})
+
 		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":True,
 		"widget_type":CheckBox})
 
 		table_data_tooltip="Tabulated data for copying and pasting in further software of preference (e.g., Prism)"
 		tabledata=field(Table, options={"label": "Experiment type", "tooltip":table_data_tooltip})
+
+	@PlotData.wraps
+	@PlotData.colormap.connect
+	def _select_colormap(self):
+		if self.PlotData.colormap.value == "Viridis":
+			self.PlotData.cmap = plt.cm.viridis
+		if self.PlotData.colormap.value =="Plasma":
+			self.PlotData.cmap= plt.cm.plasma
+		if self.PlotData.colormap.value == "Inferno":
+			self.PlotData.cmap=plt.cm.inferno
+	
+	@PlotData.wraps
+	def _update_colormap(self):
+		if self.PlotData.colormap.changed: 
+			#update plot with current colormap
+			plt.ion()
 
 	@PlotData.wraps
 	@PlotData.plot_averages.connect
@@ -185,8 +209,9 @@ class BulkRheoGUI:
 		ax.set_xscale('log')
 		fig.suptitle('Storage Modulus')
 		ax.set_ylabel('$G^{I}$ (Pa)')
+		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
 		for i in range(len(self.data)):
-			ax.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,1],label=self.names[i])
+			ax.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,1],label=self.names[i],color=cols[i])
 				#set log scale
 				# self.plt.axes[0].plot(self.data['strain [%]'][i], self.data['storage modulus [Pa]'][i], '-s')
 				# self.plt.axes[0].set_xlabel("Strain (%)")
@@ -199,7 +224,7 @@ class BulkRheoGUI:
 		if self.PrepareExperiment.experiment.value == "frequency sweep":
 			ax.set_xlabel("Frequency (rad/s)")
 			plt.show()
-	
+
 	@PlotData.wraps
 	@PlotData.plot_loss_modulus.connect
 	def _plot_loss_modulus(self):
@@ -211,8 +236,9 @@ class BulkRheoGUI:
 		ax1.set_xscale('log')
 		fig.suptitle('Loss Modulus')
 		ax1.set_ylabel('$G^{II}$ (Pa)')
+		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
 		for i in range(len(self.data)):
-			ax1.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i])
+			ax1.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
 				#set log scale
 				# self.plt1.axes[0].plot(self.data['strain [%]'][i], self.data['loss modulus [Pa]'][i], '-o')
 				# self.plt1.axes[0].set_xlabel("Strain (%)")
@@ -238,8 +264,9 @@ class BulkRheoGUI:
 		fig.suptitle('Relaxation Modulus')
 		ax2.set_ylabel('$G(t)$ (Pa)')
 		ax2.set_xlabel('t (s)')
+		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
 		for i in range(len(self.data)):
-			ax2.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i])
+			ax2.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
 		plt.legend()
 		plt.show()
 	
