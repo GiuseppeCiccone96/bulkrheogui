@@ -1,7 +1,7 @@
 # bulkrheogui
  Simple graphical user interface for analysis of bulk rheology data: 
 
- ![maingui](images/maingui1.png)
+<img src=images/maingui1.png  width=50% height=100%>
  
  ## supported files 
  Right now, data from the Anton Paar Rheometer (MCR 302) is supported. 
