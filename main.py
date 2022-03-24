@@ -228,9 +228,6 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_loss_modulus.connect
 	def _plot_loss_modulus(self):
-		#add filename on plot
-		# self.plt1.axes[0].set_yscale('log')
-		# self.plt1.axes[0].set_xscale('log')
 		fig, ax1 = plt.subplots(1, 1, figsize=(5,5))
 		ax1.set_yscale('log')
 		ax1.set_xscale('log')
@@ -239,11 +236,6 @@ class BulkRheoGUI:
 		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
 		for i in range(len(self.data)):
 			ax1.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
-				#set log scale
-				# self.plt1.axes[0].plot(self.data['strain [%]'][i], self.data['loss modulus [Pa]'][i], '-o')
-				# self.plt1.axes[0].set_xlabel("Strain (%)")
-				# self.plt1.axes[0].set_ylabel("$G^{II}$ (Pa)")
-				# self.plt1.draw()
 		plt.legend()
 		if self.PrepareExperiment.experiment.value == "strain sweep":
 			ax1.set_xlabel("Strain (%)")
