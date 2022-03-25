@@ -9,7 +9,7 @@ from pathlib import Path
 import os
 #Magicclass specific imports
 from magicclass import magicclass,set_design,field,set_options,build_help
-from magicclass.widgets import Table,CheckBox,PushButton,Figure
+from magicclass.widgets import Table,CheckBox,PushButton, Figure
 from magicgui import magicgui
 #Others
 from functions import fill_none
@@ -32,11 +32,25 @@ class BulkRheoGUI:
 		experiment=field(str, options={"label": "Experiment type","choices":["strain sweep",
 		"frequency sweep", "stress relaxation"], "tooltip":experiment_toolip})
 
+		mode = field(str, options = {"label":" Use mode", "choices":["all data",
+		"sample replicates"]}) #idea: if mode is equal to "sample replicates", allow user to average data
+		#and create average plot; if mode is equal to "all data", leave gui as it is
+
 		def load_file(self,path: Path): ...
 
 		def print_metadata(self): ...
 
 		table_metadata=field(Table)
+
+	@PrepareExperiment.wraps
+	@PrepareExperiment.mode.connect
+	def _toggle_mode(self):
+		"""Controls the operation mode of the GUI (plotting)"""
+		if self.PrepareExperiment.mode.value=="all data":
+			self.PlotData.plot_averages.visible=False
+		if self.PrepareExperiment.mode.value=="sample replicates":
+			self.PlotData.plot_averages.visible=True
+
 	
 	@PrepareExperiment.wraps
 	@PrepareExperiment.experiment.connect
@@ -154,8 +168,7 @@ class BulkRheoGUI:
 		self.metadata = {'Tool Radius [mm]': [self.tool_radius], 'Tool Area [mm^2]': [area], 'Measuring Profile': [meas_profile]}
 		self.PrepareExperiment.table_metadata.value=self.metadata
 
-	# plt = field(Figure, options={"nrows": 1, "ncols": 1})
-	# plt1 = field(Figure, options={"nrows": 1, "ncols": 1})
+
 	@magicclass(name="Visualization",layout="vertical",widget_type="groupbox")
 	class PlotData:
 		
@@ -171,13 +184,15 @@ class BulkRheoGUI:
 		plot_relax_tooltip="Plots loss modulus for each test (stress relaxation)."
 		plot_relax_modulus=field(PushButton,options={"enabled":True,"tooltip":plot_relax_tooltip,"visible":False})
 
-		colormap_tooltip = "Changes the colormap of the produced plots."
-		colormap=field(str, options={"label": "Color map","choices":["Viridis",
-		"Plasma", "Inferno"], "tooltip":colormap_tooltip})
-
 		plot_averages_tooltip="Plots average storage and loss modulus. If tests \n are of different lengths, takes the longest common length for all tests."
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":False,
 		"widget_type":CheckBox})
+
+		#add a pop up table which tabulates average data if mode = "sample replicates"
+
+		colormap_tooltip = "Changes the colormap of the produced plots."
+		colormap=field(str, options={"label": "Color map","choices":["Viridis",
+		"Plasma", "Inferno"], "tooltip":colormap_tooltip})
 
 		table_data_tooltip="Tabulated data for copying and pasting in further software of preference (e.g., Prism)"
 		tabledata=field(Table, options={"label": "Experiment type", "tooltip":table_data_tooltip})
@@ -294,6 +309,7 @@ class BulkRheoGUI:
 		
 		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
 		self.PlotData.tabledata.value=df
+
 
 	def show_help(self):
 		"""Shows help in navigating the gui."""
