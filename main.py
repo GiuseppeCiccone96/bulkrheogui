@@ -272,9 +272,6 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_relax_modulus.connect
 	def _plot_relax_modulus(self):
-		#add filename on plot
-		# self.plt1.axes[0].set_yscale('log')
-		# self.plt1.axes[0].set_xscale('log')
 		fig, ax2 = plt.subplots(1, 1, figsize=(5,5))
 		ax2.set_yscale('log')
 		ax2.set_xscale('log')
