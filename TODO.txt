@@ -1,4 +1,4 @@
 Project "TO DO" list:
 
-- allow to plot average curve (data selected by the user if mode is = "sample replicates")
-- allow user to select tabulated data and compute plots of interest
+- allow to plot average curve (if mode is = "sample replicates". Allow user to select data?)
+- tabulate average data for user to save (or allow to save average data)

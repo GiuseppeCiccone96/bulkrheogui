@@ -138,7 +138,6 @@ class BulkRheoGUI:
 	def print_metadata(self):
 		"""Gets metadata associated with the experiment."""
 
-		metadata = {}
 		with open(self.path, mode='r', encoding='utf-8', errors='ignore') as f:
 			lines = []
 			# First 25 lines
@@ -188,24 +187,27 @@ class BulkRheoGUI:
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":False,
 		"widget_type":CheckBox})
 
-		#add a pop up table which tabulates average data if mode = "sample replicates"
+		#add a pop up table which tabulates average data if mode = "sample replicates"?
 
 		colormap_tooltip = "Changes the colormap of the produced plots."
 		colormap=field(str, options={"label": "Color map","choices":["Viridis",
-		"Plasma", "Inferno"], "tooltip":colormap_tooltip})
+		"Plasma", "Inferno","B&W"], "tooltip":colormap_tooltip})
 
 		table_data_tooltip="Tabulated data for copying and pasting in further software of preference (e.g., Prism)"
 		tabledata=field(Table, options={"label": "Experiment type", "tooltip":table_data_tooltip})
 
+
 	@PlotData.wraps
 	@PlotData.colormap.connect
-	def _select_colormap(self):
+	def _select_colormap(self): #those are all colorblind friendly cmaps
 		if self.PlotData.colormap.value == "Viridis":
 			self.PlotData.cmap = plt.cm.viridis
 		if self.PlotData.colormap.value =="Plasma":
 			self.PlotData.cmap= plt.cm.plasma
 		if self.PlotData.colormap.value == "Inferno":
 			self.PlotData.cmap=plt.cm.inferno
+		if self.PlotData.colormap.value== "B&W":
+			self.PlotData.cmap=plt.cm.Greys
 	
 	@PlotData.wraps
 	def _update_colormap(self):
@@ -306,7 +308,10 @@ class BulkRheoGUI:
 		
 		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
 		self.PlotData.tabledata.value=df
-
+	
+	@PlotData.wraps
+	def _print_selected(self):
+		pass
 
 	def show_help(self):
 		"""Shows help in navigating the gui."""
@@ -315,3 +320,4 @@ class BulkRheoGUI:
 if __name__ == "__main__":
 	ui = BulkRheoGUI()
 	ui.show()
+
