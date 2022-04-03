@@ -14,7 +14,7 @@ from magicgui import magicgui
 #Others
 from functions import fill_none
 
-@magicclass(labels="True",popup_mode="popup",widget_type="split",layout="vertical")
+@magicclass(error_mode="msgbox",labels="True",popup_mode="popup",widget_type="split",layout="vertical")
 class BulkRheoGUI:
 	
 	def __init__(self):
@@ -187,8 +187,6 @@ class BulkRheoGUI:
 		plot_averages=field(False,options={"label":"plot averages","tooltip":plot_averages_tooltip,"visible":False,
 		"widget_type":CheckBox})
 
-		#add a pop up table which tabulates average data if mode = "sample replicates"?
-
 		colormap_tooltip = "Changes the colormap of the produced plots."
 		colormap=field(str, options={"label": "Color map","choices":["Viridis",
 		"Plasma", "Inferno","B&W"], "tooltip":colormap_tooltip})
@@ -212,6 +210,7 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	def _update_colormap(self):
 		if self.PlotData.colormap.changed: 
+			#TODO:
 			#update plot with current colormap
 			plt.ion()
 
@@ -219,9 +218,6 @@ class BulkRheoGUI:
 	@PlotData.plot_averages.connect
 	def _plot_averages(self):
 		if self.PlotData.plot_averages.value is True:
-			#check length of each test 
-			#slice data to that length
-			#plot average G' and G''
 			print("this function does not do anything yet!")
 		if self.PlotData.plot_averages.value is False:
 			print("why did you click again!")
@@ -229,8 +225,6 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_storage_modulus.connect
 	def _plot_storage_modulus(self):
-		# self.plt.axes[0].set_yscale('log')
-		# self.plt.axes[0].set_xscale('log')
 		fig, ax = plt.subplots(1, 1, figsize=(5,5))
 		ax.set_yscale('log')
 		ax.set_xscale('log')
@@ -239,11 +233,6 @@ class BulkRheoGUI:
 		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
 		for i in range(len(self.data)):
 			ax.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,1],label=self.names[i],color=cols[i])
-				#set log scale
-				# self.plt.axes[0].plot(self.data['strain [%]'][i], self.data['storage modulus [Pa]'][i], '-s')
-				# self.plt.axes[0].set_xlabel("Strain (%)")
-				# self.plt.axes[0].set_ylabel("$G^{I}$ (Pa)")
-				# self.plt.draw()
 		plt.legend()
 		if self.PrepareExperiment.experiment.value == "strain sweep":
 			ax.set_xlabel("Strain (%)")
