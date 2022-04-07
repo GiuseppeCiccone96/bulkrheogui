@@ -218,7 +218,7 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_averages.connect
 	def _plot_averages(self):
-		fig, ax = plt.subplots(1, 1, figsize=(5,5))
+		_, ax = plt.subplots(1, 1, figsize=(5,5))
 		ax.set_yscale('log')
 		ax.set_xscale('log')
 		if self.PlotData.plot_averages.value is True:
@@ -268,7 +268,7 @@ class BulkRheoGUI:
 				plt.show()
 				
 		if self.PlotData.plot_averages.value is False:
-			return
+			plt.close(_)
 
 	@PlotData.wraps
 	@PlotData.plot_storage_modulus.connect
