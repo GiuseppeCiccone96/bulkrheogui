@@ -13,6 +13,7 @@ from magicclass.widgets import Table,CheckBox,PushButton, Figure
 from magicgui import magicgui
 #Others
 from functions import fill_none
+import motor
 
 @magicclass(error_mode="msgbox",labels="True",popup_mode="popup",widget_type="split",layout="vertical")
 class BulkRheoGUI:
@@ -217,10 +218,57 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_averages.connect
 	def _plot_averages(self):
+		fig, ax = plt.subplots(1, 1, figsize=(5,5))
+		ax.set_yscale('log')
+		ax.set_xscale('log')
 		if self.PlotData.plot_averages.value is True:
-			print("this function does not do anything yet!")
+			if self.PrepareExperiment.experiment.value=="strain sweep":
+				x,y,y1=[],[],[]
+				for i in range(len(self.data)):
+					x.append(np.array(self.data[i])[:,0]) #strain
+					y.append(np.array(self.data[i])[:,1]) #gprime
+					y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
+				xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
+				xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=2,error=True)
+				ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+				ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+				ax.set_xlabel("Strain (%)")
+				ax.set_ylabel("Average Moduli (Pa)")
+				plt.legend()
+				plt.show()
+
+			if self.PrepareExperiment.experiment.value=="frequency sweep":
+				x,y,y1=[],[],[]
+				for i in range(len(self.data)):
+					x.append(np.array(self.data[i])[:,0]) #frequency
+					y.append(np.array(self.data[i])[:,1]) #gprime
+					y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
+				xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
+				xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=2,error=True)
+				ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+				ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+				ax.set_xlabel("Frequency (rad/s)")
+				ax.set_ylabel("Average Moduli (Pa)")
+				plt.legend()
+				plt.show()
+
+			if self.PrepareExperiment.experiment.value=="stress relaxation":
+				x,y=[],[]
+				for i in range(len(self.data)):
+					x.append(np.array(self.data[i])[:,0]) #time
+					#y.append(np.array(self.data[i])[:,1]) #stress
+					y.append(np.array(self.data[i])[:,2]) #relaxation modulus
+				#xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
+				xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
+				#ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+				ax.errorbar(xav,yav,yerr=yerr,label="$G(t)$")
+				ax.set_xlabel("Time (s)")
+				ax.set_ylabel("$G(t)$ (Pa)")
+				plt.legend()
+				plt.show()
+				
 		if self.PlotData.plot_averages.value is False:
-			print("why did you click again!")
+			return
 
 	@PlotData.wraps
 	@PlotData.plot_storage_modulus.connect
@@ -300,6 +348,7 @@ class BulkRheoGUI:
 	
 	@PlotData.wraps
 	def _print_selected(self):
+		#This cannot be done with magicgui
 		pass
 
 	def show_help(self):
@@ -309,4 +358,4 @@ class BulkRheoGUI:
 if __name__ == "__main__":
 	ui = BulkRheoGUI()
 	ui.show()
-
+	#ui.macro.widget.show()
