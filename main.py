@@ -33,8 +33,13 @@ class BulkRheoGUI:
 		experiment=field(str, options={"label": "Experiment type","choices":["strain sweep",
 		"frequency sweep", "stress relaxation"], "tooltip":experiment_toolip})
 
+		mode_tooltip = "All data means the file contains curves to be displayed all together \
+		in a single graph, without averaging them (eg, curves from the raw rheometer file). \
+		Sample replicates means the file contains eg 3 curves from the same sample type \
+		that can be averaged together using the plot averages check box." #TODO: load different files in sample replicates mode
+		#so that different average curves can be plotted together
 		mode = field(str, options = {"label":" Use mode", "choices":["all data",
-		"sample replicates"]}) #idea: if mode is equal to "sample replicates", allow user to average data
+		"sample replicates"], "tooltip":mode_tooltip}) #idea: if mode is equal to "sample replicates", allow user to average data
 		#and create average plot; if mode is equal to "all data", leave gui as it is
 
 		def load_file(self,path: Path): ...
