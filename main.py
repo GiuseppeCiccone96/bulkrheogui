@@ -33,14 +33,11 @@ class BulkRheoGUI:
 		experiment=field(str, options={"label": "Experiment type","choices":["strain sweep",
 		"frequency sweep", "stress relaxation"], "tooltip":experiment_toolip})
 
-		mode_tooltip = """All data means the file contains curves to be displayed all together
-		in a single graph, without averaging them (eg, curves from the raw rheometer file).
-		Sample replicates means the file contains eg 3 curves from the same sample type
-		that can be averaged together using the plot averages check box.""" #TODO: load different files in sample replicates mode
+		mode_tooltip = """All data: raw curves from different samples. Sample replicates: raw curves form same sample, can be averaged.""" 
+		#TODO: load different files in sample replicates mode
 		#so that different average curves can be plotted together
 		mode = field(str, options = {"label":" Use mode", "choices":["all data",
-		"sample replicates"], "tooltip":mode_tooltip}) #idea: if mode is equal to "sample replicates", allow user to average data
-		#and create average plot; if mode is equal to "all data", leave gui as it is
+		"sample replicates"], "tooltip":mode_tooltip}) 
 
 		def load_file(self,path: Path): ...
 
@@ -354,11 +351,6 @@ class BulkRheoGUI:
 		
 		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
 		self.PlotData.tabledata.value=df
-	
-	@PlotData.wraps
-	def _print_selected(self):
-		#This cannot be done with magicgui
-		pass
 
 	def show_help(self):
 		"""Shows help in navigating the gui."""
