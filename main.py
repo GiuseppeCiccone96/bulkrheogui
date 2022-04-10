@@ -134,7 +134,6 @@ class BulkRheoGUI:
 		# converting it to an array allows to have good structure for manipulation, i.e.
 		# an array of shape (n_points,n_variables). See target_variables to understand where n_variables
 		#comes from.
-		# print(np.shape(np.array(self.data))) #shape is not always as expected
 
 	@PrepareExperiment.wraps
 	@set_design(text="print metadata")
