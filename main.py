@@ -25,6 +25,7 @@ class BulkRheoGUI:
 		self.dataset=[]
 		#files
 		self.files=[]
+		self.data=None
 
 	@magicclass(name="Prepare Experiment",layout="vertical",widget_type="groupbox")
 	class PrepareExperiment:
@@ -91,7 +92,7 @@ class BulkRheoGUI:
 			names=[]
 			for riga in f:
 				if riga.startswith("Name:"):
-					names.append(riga.strip()[8::]) #names of each test
+					names.append(riga.strip()[8::]) #names of each test (curve)
 				if reading is False:
 					if riga.strip() == "Measuring Profile:": #start reading when we are at "Measuring Profile:"
 						reading=True
@@ -219,141 +220,152 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_averages.connect
 	def _plot_averages(self):
-		if len(self.data) > 2:
-			th=3
-		else:
-			th=2
-		_, ax = plt.subplots(1, 1, figsize=(5,5))
-		ax.set_yscale('log')
-		ax.set_xscale('log')
-		if self.PlotData.plot_averages.value is True:
-			if self.PrepareExperiment.experiment.value=="strain sweep":
-				x,y,y1=[],[],[]
-				for i in range(len(self.data)):
-					x.append(np.array(self.data[i])[:,0]) #strain
-					y.append(np.array(self.data[i])[:,1]) #gprime
-					y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
-				xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-				xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
-				ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
-				ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
-				ax.set_xlabel("Strain (%)")
-				ax.set_ylabel("Average Moduli (Pa)")
-				plt.legend()
-				plt.show()
+		if self.data:
+			if len(self.data) > 2:
+				th=3
+			else:
+				th=2
+			_, ax = plt.subplots(1, 1, figsize=(5,5))
+			ax.set_yscale('log')
+			ax.set_xscale('log')
+			if self.PlotData.plot_averages.value is True:
+				if self.PrepareExperiment.experiment.value=="strain sweep":
+					x,y,y1=[],[],[]
+					for i in range(len(self.data)):
+						x.append(np.array(self.data[i])[:,0]) #strain
+						y.append(np.array(self.data[i])[:,1]) #gprime
+						y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
+					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
+					xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
+					ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+					ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+					ax.set_xlabel("Strain (%)")
+					ax.set_ylabel("Average Moduli (Pa)")
+					plt.legend()
+					plt.show()
 
-			if self.PrepareExperiment.experiment.value=="frequency sweep":
-				x,y,y1=[],[],[]
-				for i in range(len(self.data)):
-					x.append(np.array(self.data[i])[:,0]) #frequency
-					y.append(np.array(self.data[i])[:,1]) #gprime
-					y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
-				xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-				xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
-				ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
-				ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
-				ax.set_xlabel("Frequency (rad/s)")
-				ax.set_ylabel("Average Moduli (Pa)")
-				plt.legend()
-				plt.show()
+				if self.PrepareExperiment.experiment.value=="frequency sweep":
+					x,y,y1=[],[],[]
+					for i in range(len(self.data)):
+						x.append(np.array(self.data[i])[:,0]) #frequency
+						y.append(np.array(self.data[i])[:,1]) #gprime
+						y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
+					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
+					xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
+					ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+					ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+					ax.set_xlabel("Frequency (rad/s)")
+					ax.set_ylabel("Average Moduli (Pa)")
+					plt.legend()
+					plt.show()
 
-			if self.PrepareExperiment.experiment.value=="stress relaxation":
-				x,y=[],[]
-				for i in range(len(self.data)):
-					x.append(np.array(self.data[i])[:,0]) #time
-					#y.append(np.array(self.data[i])[:,1]) #stress
-					y.append(np.array(self.data[i])[:,2]) #relaxation modulus
-				#xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
-				xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-				#ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
-				ax.errorbar(xav,yav,yerr=yerr,label="$G(t)$")
-				ax.set_xlabel("Time (s)")
-				ax.set_ylabel("$G(t)$ (Pa)")
-				plt.legend()
-				plt.show()
-				
-		if self.PlotData.plot_averages.value is False:
-			plt.close(_)
+				if self.PrepareExperiment.experiment.value=="stress relaxation":
+					x,y=[],[]
+					for i in range(len(self.data)):
+						x.append(np.array(self.data[i])[:,0]) #time
+						#y.append(np.array(self.data[i])[:,1]) #stress
+						y.append(np.array(self.data[i])[:,2]) #relaxation modulus
+					#xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
+					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
+					#ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+					ax.errorbar(xav,yav,yerr=yerr,label="$G(t)$")
+					ax.set_xlabel("Time (s)")
+					ax.set_ylabel("$G(t)$ (Pa)")
+					plt.legend()
+					plt.show()
+					
+			if self.PlotData.plot_averages.value is False:
+				plt.close(_)
 
 	@PlotData.wraps
 	@PlotData.plot_storage_modulus.connect
 	def _plot_storage_modulus(self):
-		fig, ax = plt.subplots(1, 1, figsize=(5,5))
-		ax.set_yscale('log')
-		ax.set_xscale('log')
-		fig.suptitle('Storage Modulus')
-		ax.set_ylabel('$G^{I}$ (Pa)')
-		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
-		for i in range(len(self.data)):
-			ax.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,1],label=self.names[i],color=cols[i])
-		plt.legend()
-		if self.PrepareExperiment.experiment.value == "strain sweep":
-			ax.set_xlabel("Strain (%)")
-			plt.show()
-		if self.PrepareExperiment.experiment.value == "frequency sweep":
-			ax.set_xlabel("Frequency (rad/s)")
-			plt.show()
+		if self.data:
+			fig, ax = plt.subplots(1, 1, figsize=(5,5))
+			ax.set_yscale('log')
+			ax.set_xscale('log')
+			fig.suptitle('Storage Modulus')
+			ax.set_ylabel('$G^{I}$ (Pa)')
+			cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
+			for i in range(len(self.data)):
+				ax.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,1],label=self.names[i],color=cols[i])
+			plt.legend()
+			if self.PrepareExperiment.experiment.value == "strain sweep":
+				ax.set_xlabel("Strain (%)")
+				plt.show()
+			if self.PrepareExperiment.experiment.value == "frequency sweep":
+				ax.set_xlabel("Frequency (rad/s)")
+				plt.show()
 
 	@PlotData.wraps
 	@PlotData.plot_loss_modulus.connect
 	def _plot_loss_modulus(self):
-		fig, ax1 = plt.subplots(1, 1, figsize=(5,5))
-		ax1.set_yscale('log')
-		ax1.set_xscale('log')
-		fig.suptitle('Loss Modulus')
-		ax1.set_ylabel('$G^{II}$ (Pa)')
-		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
-		for i in range(len(self.data)):
-			ax1.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
-		plt.legend()
-		if self.PrepareExperiment.experiment.value == "strain sweep":
-			ax1.set_xlabel("Strain (%)")
-			plt.show()
-		if self.PrepareExperiment.experiment.value == "frequency sweep":
-			ax1.set_xlabel("Frequency (rad/s)")
-			plt.show()
+		if self.data:
+			fig, ax1 = plt.subplots(1, 1, figsize=(5,5))
+			ax1.set_yscale('log')
+			ax1.set_xscale('log')
+			fig.suptitle('Loss Modulus')
+			ax1.set_ylabel('$G^{II}$ (Pa)')
+			cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
+			for i in range(len(self.data)):
+				ax1.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
+			plt.legend()
+			if self.PrepareExperiment.experiment.value == "strain sweep":
+				ax1.set_xlabel("Strain (%)")
+				plt.show()
+			if self.PrepareExperiment.experiment.value == "frequency sweep":
+				ax1.set_xlabel("Frequency (rad/s)")
+				plt.show()
 
 	@PlotData.wraps
 	@PlotData.plot_relax_modulus.connect
 	def _plot_relax_modulus(self):
-		fig, ax2 = plt.subplots(1, 1, figsize=(5,5))
-		ax2.set_yscale('log')
-		ax2.set_xscale('log')
-		fig.suptitle('Relaxation Modulus')
-		ax2.set_ylabel('$G(t)$ (Pa)')
-		ax2.set_xlabel('t (s)')
-		cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
-		for i in range(len(self.data)):
-			ax2.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
-		plt.legend()
-		plt.show()
+		if self.data:
+			fig, ax2 = plt.subplots(1, 1, figsize=(5,5))
+			ax2.set_yscale('log')
+			ax2.set_xscale('log')
+			fig.suptitle('Relaxation Modulus')
+			ax2.set_ylabel('$G(t)$ (Pa)')
+			ax2.set_xlabel('t (s)')
+			cols=[self.PlotData.cmap(i) for i in np.linspace(0,1,len(self.data))]
+			for i in range(len(self.data)):
+				ax2.plot(np.array(self.data[i])[:,0], np.array(self.data[i])[:,2],label=self.names[i],color=cols[i])
+			plt.legend()
+			plt.show()
 	
 	@PlotData.wraps
 	def tabulate_data(self):
-		data=self.data 
-		names = np.array(self.names)
-	
-		if self.PrepareExperiment.experiment.value=="strain sweep":
-			variables_names=["Strain","Storage Modulus","Loss Modulus"]
+		if self.data:
+			data=self.data 
+			names = np.array(self.names)
+		
+			if self.PrepareExperiment.experiment.value=="strain sweep":
+				variables_names=["Strain","Storage Modulus","Loss Modulus"]
 
-		if self.PrepareExperiment.experiment.value=="frequency sweep":
-			variables_names=["Frequency","Storage Modulus","Loss Modulus"]
+			if self.PrepareExperiment.experiment.value=="frequency sweep":
+				variables_names=["Frequency","Storage Modulus","Loss Modulus"]
 
-		if self.PrepareExperiment.experiment.value=="stress relaxation":
-			variables_names=["Time","Relaxation Modulus","Shear Stress"]
-		
-		data = fill_none(data,variables_names)
-		
-		column_names = variables_names*len(data) #repeat variables names for each test
-		new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))] #repeated names
-		datat = np.array([np.array(data[i])[:,j] for i in range(len(data)) for j in range(len(variables_names))]).T
-		
-		df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
-		self.PlotData.tabledata.value=df
+			if self.PrepareExperiment.experiment.value=="stress relaxation":
+				variables_names=["Time","Relaxation Modulus","Shear Stress"]
+			
+			data = fill_none(data,variables_names)
+			
+			column_names = variables_names*len(data) #repeat variables names for each test
+			new_names = [names[i] for i in range(len(data)) for j in range(len(variables_names))] #repeated names
+			datat = np.array([np.array(data[i])[:,j] for i in range(len(data)) for j in range(len(variables_names))]).T
+			
+			df=pd.DataFrame(datat,columns=[column_names[i]+" "+ new_names[i] for i in range(len(column_names))])
+			self.PlotData.tabledata.value=df
+
 
 	def show_help(self):
 		"""Shows help in navigating the gui."""
 		build_help(self).show()
+
+	@magicclass(name="Further Options",layout="horizontal",widget_type="groupbox")
+	class FurtherOptions:
+		def save_average(self):
+			pass
 
 if __name__ == "__main__":
 	ui = BulkRheoGUI()
