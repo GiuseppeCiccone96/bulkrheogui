@@ -1,5 +1,5 @@
 Project "TO DO" list:
 
-- fix but for which average frequency plot is plotted backwards (freq in raw data is in descending order)
-- allow user to save average curve data 
-- allows user to add and remove curves from plot 
+- fix bug for which average frequency plot is plotted backwards (freq in raw data is in descending order)
+- allow user to save average curve data
+- allows user to add and remove curves from plot - HIGH PRIORITY
