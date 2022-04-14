@@ -1,4 +1,5 @@
 Project "TO DO" list:
 
-- allow to plot average curve (if mode is = "sample replicates") -> done 
-- allow user to save average curves
+- fix but for which average frequency plot is plotted backwards (freq in raw data is in descending order)
+- allow user to save average curve data 
+- allows user to add and remove curves from plot 
