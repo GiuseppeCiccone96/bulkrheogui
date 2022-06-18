@@ -12,7 +12,7 @@ from magicclass import magicclass,set_design,field,set_options,build_help
 from magicclass.widgets import Table,CheckBox,PushButton, Figure
 from magicgui import magicgui
 #Others
-from functions import fill_none
+from functions import fill_none, is_all_same
 import motor
 
 @magicclass(error_mode="msgbox",labels="True",popup_mode="popup",widget_type="split",layout="vertical")
@@ -29,16 +29,24 @@ class BulkRheoGUI:
 
 	@magicclass(name="Prepare Experiment",layout="vertical",widget_type="groupbox")
 	class PrepareExperiment:
+		"""
+		Experiment preparation.
 
-		experiment_toolip = "The experiment type."
+    Attributes
+    ----------
+    experiment : str
+								The experiment type. can be "strain sweep", "frequency sweep" or "stress relaxation".
+								It reflects the data in the uploaded file.
+		mode: str 
+					GUI operation. 
+					All data: raw curves from different samples. Sample replicates: raw curves form same sample, can be averaged.
+    """
+
 		experiment=field(str, options={"label": "Experiment type","choices":["strain sweep",
-		"frequency sweep", "stress relaxation"], "tooltip":experiment_toolip})
+		"frequency sweep", "stress relaxation"]})
 
-		mode_tooltip = """All data: raw curves from different samples. Sample replicates: raw curves form same sample, can be averaged.""" 
-		#TODO: load different files in sample replicates mode
-		#so that different average curves can be plotted together
 		mode = field(str, options = {"label":" Use mode", "choices":["all data",
-		"sample replicates"], "tooltip":mode_tooltip}) 
+		"sample replicates"]}) 
 
 		def load_file(self,path: Path): ...
 
@@ -220,11 +228,6 @@ class BulkRheoGUI:
 	@PlotData.wraps
 	@PlotData.plot_averages.connect
 	def _plot_averages(self):
-		if self.data:
-			if len(self.data) > 2:
-				th=3
-			else:
-				th=2
 			_, ax = plt.subplots(1, 1, figsize=(5,5))
 			ax.set_yscale('log')
 			ax.set_xscale('log')
@@ -232,13 +235,24 @@ class BulkRheoGUI:
 				if self.PrepareExperiment.experiment.value=="strain sweep":
 					x,y,y1=[],[],[]
 					for i in range(len(self.data)):
-						x.append(np.array(self.data[i])[:,0]) #strain
+						x.append(np.array(self.data[i])[:,0]) #strain 
 						y.append(np.array(self.data[i])[:,1]) #gprime
 						y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
-					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-					xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
+					if is_all_same(x):
+						xav=np.average(x,axis=0)
+						yav=np.average(y,axis=0)
+						yerr = np.std(y,axis=0)
+						yav1 = np.average(y1,axis=0)
+						yerr1= np.std(y1,axis=0)
+					else:
+						if len(self.data) > 2:
+							th=3
+						else:
+							th=2 
+						xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
+						_,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
 					ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
-					ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+					ax.errorbar(xav,yav1,yerr=yerr1,label="$G^{II}$")
 					ax.set_xlabel("Strain (%)")
 					ax.set_ylabel("Average Moduli (Pa)")
 					plt.legend()
@@ -250,10 +264,21 @@ class BulkRheoGUI:
 						x.append(np.array(self.data[i])[:,0]) #frequency
 						y.append(np.array(self.data[i])[:,1]) #gprime
 						y1.append(np.array(self.data[i])[:,2]) #gdoubleprime
-					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-					xav1,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
+					if is_all_same(x):
+						xav=np.average(x,axis=0)
+						yav=np.average(y,axis=0)
+						yerr = np.std(y,axis=0)
+						yav1 = np.average(y1,axis=0)
+						yerr1= np.std(y1,axis=0)
+					else:
+						if len(self.data) > 2:
+							th=3
+						else:
+							th=2 
+						xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
+						_,yav1,yerr1=motor.getMedCurve(x,y1,threshold=th,error=True)
 					ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
-					ax.errorbar(xav1,yav1,yerr=yerr1,label="$G^{II}$")
+					ax.errorbar(xav,yav1,yerr=yerr1,label="$G^{II}$")
 					ax.set_xlabel("Frequency (rad/s)")
 					ax.set_ylabel("Average Moduli (Pa)")
 					plt.legend()
@@ -264,13 +289,20 @@ class BulkRheoGUI:
 					for i in range(len(self.data)):
 						x.append(np.array(self.data[i])[:,0]) #time
 						#y.append(np.array(self.data[i])[:,1]) #stress
-						y.append(np.array(self.data[i])[:,2]) #relaxation modulus
-					#xav,yav,yerr=motor.getMedCurve(x,y,threshold=2,error=True)
-					xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
-					#ax.errorbar(xav,yav,yerr=yerr,label="$G^{I}$")
+						y.append(np.array(self.data[i])[:,2]) #relax modulus
+					if is_all_same(x):
+						xav=np.average(x,axis=0)
+						yav=np.average(y,axis=0)
+						yerr = np.std(y,axis=0)
+					else:
+						if len(self.data) > 2:
+							th=3
+						else:
+							th=2 
+						xav,yav,yerr=motor.getMedCurve(x,y,threshold=th,error=True)
 					ax.errorbar(xav,yav,yerr=yerr,label="$G(t)$")
 					ax.set_xlabel("Time (s)")
-					ax.set_ylabel("$G(t)$ (Pa)")
+					ax.set_ylabel("Relaxation modulus (Pa)")
 					plt.legend()
 					plt.show()
 					
